@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
+
 public class JwtTokenFilter extends OncePerRequestFilter {
     //Se ejecuta por cada peticion
     private final static Logger logger= LoggerFactory.getLogger(JwtProvider.class);
@@ -40,7 +40,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }catch (Exception e){
             logger.error("Fail en el método doFilter");
         }
-
         filterChain.doFilter(req,res);
     }
 

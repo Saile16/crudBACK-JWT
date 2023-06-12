@@ -22,21 +22,21 @@ public class JwtProvider {
     private int expiration;
 
     public String generateToken(Authentication authentication){
-        UsuarioPrincipal usuarioPrincipal= (UsuarioPrincipal) authentication.getPrincipal();
+        UsuarioPrincipal usuarioPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
         return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration*1000))
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
     public String getNombreUsuarioFromToken(String token){
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token){
-        try{
-            Jwts.parser().setSigningKey(secret).parseClaimsJwt(token);
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
         }catch (MalformedJwtException e){
             logger.error("token mal formado");
@@ -45,7 +45,7 @@ public class JwtProvider {
         }catch (ExpiredJwtException e){
             logger.error("token expirado");
         }catch (IllegalArgumentException e){
-            logger.error("token vacio");
+            logger.error("token vacío");
         }catch (SignatureException e){
             logger.error("fail en la firma");
         }
